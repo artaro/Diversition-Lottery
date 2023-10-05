@@ -14,7 +14,9 @@ const LotteryChecker = () => {
     setUserNumber(e.target.value);
   };
 
-  const checkUserNumber = () => {
+  const checkUserNumber = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
     if (!userNumber || userNumber.length < 2) {
       setIsCheck(false);
       alert("กรุณากรอกเลขล็อตเตอรี่ หรือกรอก 2 หลักขึ้นไป");
@@ -51,7 +53,7 @@ const LotteryChecker = () => {
         ตรวจรางวัลล็อตเตอรี่ Diversition
       </div>
       <div className="px-3 py-3 flex flex-col justify-center items-center shadow-sm shadow-gray-200">
-        <form className="flex items-center">
+        <form className="flex items-center" onSubmit={checkUserNumber}>
           <input
             className="px-3 py-[13px] border"
             type="text"
@@ -62,8 +64,7 @@ const LotteryChecker = () => {
           />
           <button
             className="my-3 px-3 py-3 rounded-r-lg bg-[#F4D160] text-white text-xl text-center hover:bg-[#FBEEAC] transition-all duration-300 cursor-pointer"
-            type="button"
-            onClick={checkUserNumber}
+            type="submit"
           >
             ตรวจสอบ
           </button>
