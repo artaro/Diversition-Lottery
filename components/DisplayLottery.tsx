@@ -1,25 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useResultContext } from "@/context/store";
 
-interface ILotteryResults {
-  firstPrize: string[];
-  nearFirstPrize: string[];
-  secondPrize: string[];
-  lastTwoDigitsPrize: string[];
-}
+const DisplayLottery = () => {
+  const { result, setResult } = useResultContext();
 
-const RandomLottery = () => {
-  const [lotteryResults, setLotteryResults] = useState<ILotteryResults>({
-    firstPrize: [],
-    nearFirstPrize: [],
-    secondPrize: [],
-    lastTwoDigitsPrize: [],
+  useEffect(() => {
+    const storedResult = localStorage.getItem("Diversition-Lottery-Result");
+
+    if (storedResult) {
+      setResult(JSON.parse(storedResult));
+    }
   });
 
-  const generateRandomLotteryResults = () => {
+  const handleRandomResult = () => {
     const randomNumber = Math.floor(Math.random() * 1000);
-
     const randomNumberString = randomNumber.toString().padStart(3, "0");
 
     const secondPrize: string[] = [];
@@ -42,34 +38,38 @@ const RandomLottery = () => {
 
     const lastTwoDigitsPrize = [randomNumberString.slice(-2)];
 
-    return setLotteryResults({
+    const newResult = {
       firstPrize: [randomNumberString],
       nearFirstPrize,
       secondPrize,
       lastTwoDigitsPrize,
-    });
-  };
+    };
 
-  useEffect(() => {
-    generateRandomLotteryResults();
-  }, []);
+    localStorage.setItem(
+      "Diversition-Lottery-Result",
+      JSON.stringify(newResult)
+    );
+
+    setResult(newResult);
+  };
 
   return (
     <div className="w-full">
-      <h2>ผลการออกรางวัลล็อตเตอรี่ Diversition</h2>
-      <button
-        className="my-3 px-3 py-3 rounded-xl bg-[#9400FF] text-white text-xl text-center hover:bg-[#8250FF] transition-all duration-300 cursor-pointer shadow-sm shadow-black"
-        onClick={generateRandomLotteryResults}
-      >
-        ดำเนินการสุ่มรางวัล
-      </button>
+      <div className="flex justify-center items-center">
+        <button
+          className="my-3 px-6 py-6 rounded-lg bg-[#F4D160] text-white text-xl text-center hover:bg-[#FBEEAC] transition-all duration-300 cursor-pointer shadow-sm shadow-gray-200"
+          onClick={handleRandomResult}
+        >
+          ดำเนินการสุ่มรางวัล
+        </button>
+      </div>
       <div>
         <div>
           <div className="px-3 py-3 rounded-t-lg bg-[#27005D] text-white text-4xl text-center font-bold">
             รางวัลที่ 1
           </div>
-          <div className="w-full flex flex-row justify-around rounded-b-lg bg-[#E4F1FF]">
-            {lotteryResults.firstPrize.map((num) => (
+          <div className="my-3 w-full flex flex-row justify-around rounded-b-lg shadow-sm shadow-gray-200">
+            {result.firstPrize.map((num) => (
               <p className="mx-2 my-2 px-9 py-9 rounded bg-[#9400FF] text-white text-7xl font-bold">
                 {num}
               </p>
@@ -80,8 +80,8 @@ const RandomLottery = () => {
           <div className="px-3 py-3 rounded-t-lg bg-[#27005D] text-white text-4xl text-center font-bold">
             รางวัลเลขข้างเคียงรางวัลที่ 1
           </div>
-          <div className="w-full flex flex-row justify-around rounded-b-lg bg-[#E4F1FF]">
-            {lotteryResults.nearFirstPrize.map((num) => (
+          <div className="my-3 w-full flex flex-row justify-around rounded-b-lg shadow-sm shadow-gray-200">
+            {result.nearFirstPrize.map((num) => (
               <p className="mx-2 my-2 px-9 py-9 rounded bg-[#9400FF] text-white text-7xl font-bold">
                 {num}
               </p>
@@ -92,8 +92,8 @@ const RandomLottery = () => {
           <div className="px-3 py-3 rounded-t-lg bg-[#27005D] text-white text-4xl text-center font-bold">
             รางวัลที่ 2
           </div>
-          <div className="w-full flex flex-row justify-around rounded-b-lg bg-[#E4F1FF]">
-            {lotteryResults.secondPrize.map((num) => (
+          <div className="my-3 w-full flex flex-row justify-around rounded-b-lg shadow-sm shadow-gray-200">
+            {result.secondPrize.map((num) => (
               <p className="mx-2 my-2 px-9 py-9 rounded bg-[#9400FF] text-white text-7xl font-bold">
                 {num}
               </p>
@@ -104,8 +104,8 @@ const RandomLottery = () => {
           <div className="px-3 py-3 rounded-t-lg bg-[#27005D] text-white text-4xl text-center font-bold">
             รางวัลเลขท้าย 2 ตัว
           </div>
-          <div className="w-full flex flex-row justify-around rounded-b-lg bg-[#E4F1FF]">
-            {lotteryResults.lastTwoDigitsPrize.map((num) => (
+          <div className="my-3 w-full flex flex-row justify-around rounded-b-lg shadow-sm shadow-gray-200">
+            {result.lastTwoDigitsPrize.map((num) => (
               <p className="mx-2 my-2 px-9 py-9 rounded bg-[#9400FF] text-white text-7xl font-bold">
                 {num}
               </p>
@@ -117,4 +117,4 @@ const RandomLottery = () => {
   );
 };
 
-export default RandomLottery;
+export default DisplayLottery;

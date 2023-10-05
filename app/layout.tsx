@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { ResultContextProvider } from "@/context/store";
 
 export const metadata: Metadata = {
   title: "Diversition Lottery",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ResultContextProvider>{children}</ResultContextProvider>
+      </body>
     </html>
   );
 }
